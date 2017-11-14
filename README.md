@@ -34,13 +34,15 @@ Pour faire fonctionner correctement le projet, il vous faudra :
 
 Pour aller plus vite, vous pouvez installer directement :
 1. Sur Windows
+
 	| W | A | M | P |
-	| --- |:---:|:---:|:---:|
+	|:---:|:---:|:---:|:---:|
 	| **Windows** | **Apache** | **MySQL** | **PHP** |
 
 2. Sur Linux
+
 	| L | A | M | P |
-	| --- |:---:|:---:|:---:|
+	|:---:|:---:|:---:|:---:|
 	| **Linux** | **Apache** | **MySQL** | **PHP** |
 
 
@@ -52,6 +54,8 @@ Les routes du sites sont définies dans le fichier `.htaccess`.
 La structure de la base de données est située dans le fichier `users.sql` (à importer directement).
 
 Une fois toute les dépendances installées, et le projet cloné, suivez la procédure d'installation.
+
+--------------------------------------
 
 ### SOUS LINUX
 
@@ -66,10 +70,54 @@ Une fois l'API en votre possession :
 
 #### Installation et configuration du serveur web (Apache2)
 
-```Shell
+```shell
 sudo apt-get install lamp-server^
 ```
 Pour vérifier que Apache2 est bien installé sur votre ordinateur, lancer l'URL localhost. Vous devriez arriver sur une page de présentation d'Apache2.
+
+Création d'un VirtualHost pour hébergé notre site :
+1. Rendez-vous dans le fichier /etc/hosts afin de faire pointer un nom de domaine sur notre IP locale
+	* `sudo nano /etc/hosts`
+	* Ajouter la ligne _127.0.0.1       monsupersite.fr_
+	* **CTRL + X et O** pour quitter l'éditeur en enregistrant les modifications
+
+2. Création d'un lien symbolique qui pointe vers le dossier PT4/, normalement situé dans /var/www/html
+	* `sudo ln -s /var/www/html/PT4/ /var/www/monsupersite.fr`
+
+3. Création d'un nouveau fichier de configuration pour notre site que l'on nommera 001-monsupersite.conf
+	* `sudo nano /etc/apache2/sites-available/001-monsupersite.conf`
+	* Contenu de ce fichier :
+		```python
+		<VirtualHost *:80>
+        	ServerAdmin webmestre@test.fr
+        	ServerName monsupersite.fr
+        	ServerAlias *.monsupersite.fr
+        	DocumentRoot /var/www/monsupersite.fr
+        	<Directory /var/www/monsupersite.fr>
+				Options -Indexes +FollowSymLinks
+				AllowOverride All
+			</Directory>
+	        ErrorLog ${APACHE_LOG_DIR}/error.log
+	        CustomLog ${APACHE_LOG_DIR}/access.log combined
+		</VirtualHost>
+		```
+
+	* **CTRL + X et O** pour quitter l'éditeur en enregistrant les modifications
+	* `sudo service apache2 reload`
+
+4. Activation de monsupersite.fr
+	* `cd /etc/apache2/sites-enabled/`
+	* `sudo a2ensite 001-pt4.conf`
+	* `sudo service apache2 reload`
+
+5. Activation du module de réécriture d'URL
+	* `sudo a2enmod rewrite`
+	* `sudo service apache2 reload`
+
+Si la commande `sudo service apache2 reload` retourne un code 1, cela veut dire que les fichiers de configurations contiennent une ou plusieurs erreurs.
+Pour détecter les erreurs, vous devez tester la configuration d'Apache2 avec la commande `usr/sbin/apache2ctl/ configtest`.
+
+--------------------------------------
 
 ### SOUS WINDOWS
 
