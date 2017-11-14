@@ -1,0 +1,13 @@
+Options +FollowSymlinks
+RewriteEngine On
+RewriteBase /PT4
+ErrorDocument 404 /index.php?section=home
+
+RewriteRule ^home$ /index.php?section=home
+RewriteRule ^connect$ /index.php?section=connect [L]
+RewriteRule ^register$ /index.php?section=register [L]
+RewriteRule ^carte$ /index.php?section=carte [L]
+RewriteRule ^upload$ /index.php?section=upload [L]
+RewriteRule ^logout$ /index.php?section=logout [L]
+RewriteRule ^choix$ /index.php?section=choix [L]
+RewriteRule ^print$ /index.php?section=print [L]

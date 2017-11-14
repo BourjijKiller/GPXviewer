@@ -1,0 +1,9 @@
+.custom-success {
+    color:green;
+    font-weight:bold;
+}
+
+.custom-error {
+    color:red;
+    font-weight:bold;
+}
